@@ -2,13 +2,14 @@ package dammy.example.authentication.service;
 
 import dammy.example.authentication.data.models.User;
 import dammy.example.authentication.data.repositories.UserRepository;
+import dammy.example.authentication.dtos.request.ForgotPasswordRequest;
 import dammy.example.authentication.dtos.request.LoginRequest;
 import dammy.example.authentication.dtos.request.RegisterRequest;
+import dammy.example.authentication.dtos.response.ForgotPasswordResponse;
 import dammy.example.authentication.dtos.response.LoginResponse;
 import dammy.example.authentication.dtos.response.RegisterResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional
 public class UserServiceImpl implements UserService{
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public RegisterResponse signUp(RegisterRequest registerRequest) {
@@ -66,12 +66,35 @@ public class UserServiceImpl implements UserService{
 
             return loginResponse;
         }
-
         throw new IllegalArgumentException("Invalid email or password");
-
-
     }
+
+    @Override
+    public ForgotPasswordResponse forgotPassword(ForgotPasswordRequest forgotPasswordRequest) {
+        String email = forgotPasswordRequest.getEmail();
+        Optional<User> foundUser = userRepository.findByEmail(email);
+        if (foundUser.isPresent()){
+            User user = foundUser.get();
+
+            String newPassword = generatePassword();
+             user.setPassword(encodePassword(newPassword));
+             userRepository.save(user);
+             ForgotPasswordResponse response = new ForgotPasswordResponse();
+             response.setMessage("Password reset successfully");
+            log.info("User with new Password------->{}", user);
+            return response;
+
+        }
+        throw  new IllegalArgumentException("User with provided email not found");
+    }
+
     private static boolean isMatch(String a, String b){
         return a.equals(b);
+    }
+    private static String generatePassword(){
+        return "saint9danchrysalisrealm";
+    }
+    private String encodePassword(String password){
+        return password;
     }
 }
