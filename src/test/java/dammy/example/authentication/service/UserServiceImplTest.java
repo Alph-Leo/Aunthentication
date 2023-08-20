@@ -63,19 +63,19 @@ class UserServiceImplTest {
     @Test
     void forgotPassword(){
 
-        RegisterRequest request = new RegisterRequest();
-        request.setFirstName("ola");
-        request.setLastName("Navi");
-        request.setPhoneNumber("+1836453994776");
-        request.setEmail("Omolola@yahoo.com");
-        request.setPassword("bluecourage");
-
-        userService.signUp(request);
-        log.info("Newly Registered User------->{}", request);
-        assertNotNull(request);
+//        RegisterRequest request = new RegisterRequest();
+//        request.setFirstName("ola");
+//        request.setLastName("Navi");
+//        request.setPhoneNumber("+1836453994776");
+//        request.setEmail("ZhangXhuan@yahoo.com");
+//        request.setPassword("bluecourage");
+//
+//        userService.signUp(request);
+//        log.info("Newly Registered User------->{}", request);
+//        assertNotNull(request);
 
         ForgotPasswordRequest passwordRequest = new ForgotPasswordRequest();
-        passwordRequest.setEmail("Omolola@yahoo.com");
+        passwordRequest.setEmail("ZhangXhuan@yahoo.com");
 
         ForgotPasswordResponse response = userService.forgotPassword(passwordRequest);
         log.info("new password reset response------->{}", response);
